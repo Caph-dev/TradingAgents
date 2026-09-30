@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "46062590-78f2-46c6-9d74-4fae32d4d4a4",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "/Users/caph/Workspace/TradingAgents/.archify/architecture-tradingagents-20260930-174912/candidate.json",
+  "output": "/Users/caph/Workspace/TradingAgents/.archify/architecture-tradingagents-20260930-174912/tradingagents.html",
+  "specification": {
+    "sha256": "3b750418da9407667a4a14f185e01df98a29fde41cde8cb4c585914496bd6753",
+    "bytes": 10794
+  },
+  "artifact": {
+    "sha256": "d2ff1545b36058741ab44712f7d1908a86634d3f9a5164100a732ab71f683a1c",
+    "bytes": 777020
+  }
+}

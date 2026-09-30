@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "TradingAgents 决策架构",
+    "locale": "zh-CN",
+    "output": ".archify/architecture-tradingagents-20260930-174912/tradingagents.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "git@github.com:Caph-dev/TradingAgents.git",
+      "provider": "github",
+      "link_mode": "local-only",
+      "revision": "8b22d43d01d9ddda5d686d093d5385884622f3de"
+    }
+  },
+  "components": [
+    {
+      "id": "user",
+      "type": "external",
+      "label": "用户",
+      "sublabel": "研究员",
+      "pos": [312, 20],
+      "size": [200, 68],
+      "sources": [
+        { "path": "cli/main.py", "line": 32, "end_line": 67, "label": "无子命令即开始分析" }
+      ]
+    },
+    {
+      "id": "cli",
+      "type": "frontend",
+      "label": "分析 CLI",
+      "sublabel": "typer",
+      "pos": [312, 176],
+      "size": [200, 76],
+      "sources": [
+        { "path": "cli/main.py", "line": 32, "end_line": 85, "label": "解析标的与持仓" },
+        { "path": "cli/run.py", "line": 97, "end_line": 125, "label": "选定后创建交易图" }
+      ]
+    },
+    {
+      "id": "graph",
+      "type": "backend",
+      "label": "交易图",
+      "sublabel": "TradingAgentsGraph",
+      "pos": [312, 340],
+      "size": [200, 176],
+      "sources": [
+        { "path": "tradingagents/graph/trading_graph.py", "line": 51, "end_line": 130, "label": "组装模型与图" },
+        { "path": "tradingagents/graph/trading_graph.py", "line": 182, "end_line": 205, "label": "propagate 跑一轮" },
+        { "path": "tradingagents/graph/setup.py", "line": 155, "end_line": 179, "label": "主链边" }
+      ]
+    },
+    {
+      "id": "analysts",
+      "type": "backend",
+      "label": "分析师组",
+      "sublabel": "四岗同时",
+      "pos": [312, 604],
+      "size": [200, 108],
+      "sources": [
+        { "path": "tradingagents/graph/setup.py", "line": 155, "end_line": 160, "label": "同时起步并汇合" },
+        { "path": "tradingagents/graph/analyst_execution.py", "line": 20, "end_line": 45, "label": "四类分析师" },
+        { "path": "tradingagents/graph/setup.py", "line": 53, "end_line": 90, "label": "各自的工具子图" }
+      ]
+    },
+    {
+      "id": "research",
+      "type": "backend",
+      "label": "研究辩论",
+      "sublabel": "多空后定案",
+      "pos": [608, 604],
+      "size": [200, 108],
+      "sources": [
+        { "path": "tradingagents/graph/setup.py", "line": 162, "end_line": 169, "label": "多空条件边" },
+        { "path": "tradingagents/graph/conditional_logic.py", "line": 12, "end_line": 21, "label": "轮次用尽交经理" },
+        { "path": "tradingagents/agents/managers/research_manager.py", "line": 13, "end_line": 23, "label": "产出投资计划" }
+      ]
+    },
+    {
+      "id": "trader",
+      "type": "backend",
+      "label": "交易员",
+      "sublabel": "拟定方案",
+      "pos": [608, 804],
+      "size": [200, 80],
+      "sources": [
+        { "path": "tradingagents/graph/setup.py", "line": 169, "end_line": 170, "label": "计划交给交易员" },
+        { "path": "tradingagents/agents/trader/trader.py", "line": 20, "end_line": 20, "label": "交易员节点" }
+      ]
+    },
+    {
+      "id": "risk",
+      "type": "backend",
+      "label": "风险辩论",
+      "sublabel": "三方轮转",
+      "pos": [608, 976],
+      "size": [200, 88],
+      "sources": [
+        { "path": "tradingagents/graph/setup.py", "line": 170, "end_line": 177, "label": "风险条件边" },
+        { "path": "tradingagents/graph/conditional_logic.py", "line": 23, "end_line": 33, "label": "轮次用尽交经理" }
+      ]
+    },
+    {
+      "id": "pm",
+      "type": "backend",
+      "label": "组合经理",
+      "sublabel": "五档评级",
+      "pos": [608, 1156],
+      "size": [200, 88],
+      "sources": [
+        { "path": "tradingagents/graph/setup.py", "line": 179, "end_line": 179, "label": "终裁后结束" },
+        { "path": "tradingagents/agents/managers/portfolio_manager.py", "line": 1, "end_line": 8, "label": "结构化终裁" }
+      ]
+    },
+    {
+      "id": "router",
+      "type": "backend",
+      "label": "数据路由",
+      "sublabel": "route_to_vendor",
+      "pos": [312, 800],
+      "size": [200, 88],
+      "sources": [
+        { "path": "tradingagents/dataflows/router.py", "line": 200, "end_line": 218, "label": "只走配置链" },
+        { "path": "tradingagents/agents/tools.py", "line": 1, "end_line": 35, "label": "日期截断后路由" }
+      ]
+    },
+    {
+      "id": "llm",
+      "type": "external",
+      "label": "模型供应商",
+      "sublabel": "deep 与 quick",
+      "pos": [880, 392],
+      "size": [188, 72],
+      "sources": [
+        { "path": "tradingagents/llm_clients/factory.py", "line": 6, "end_line": 32, "label": "按供应商建客户端" },
+        { "path": "tradingagents/graph/trading_graph.py", "line": 83, "end_line": 97, "label": "深思与快思各一" }
+      ]
+    },
+    {
+      "id": "social",
+      "type": "external",
+      "label": "社交数据源",
+      "sublabel": "StockTwits·Reddit",
+      "pos": [20, 618],
+      "size": [196, 80],
+      "sources": [
+        { "path": "tradingagents/agents/analysts/sentiment_analyst.py", "line": 42, "end_line": 68, "label": "先拉取再写报告" }
+      ]
+    },
+    {
+      "id": "vendors",
+      "type": "external",
+      "label": "行情数据源",
+      "sublabel": "Yahoo·SEC·FRED",
+      "pos": [20, 800],
+      "size": [196, 88],
+      "sources": [
+        { "path": "tradingagents/default_config.py", "line": 147, "end_line": 156, "label": "默认供应商" },
+        { "path": "tradingagents/dataflows/router.py", "line": 97, "end_line": 148, "label": "方法到实现" }
+      ]
+    },
+    {
+      "id": "memory",
+      "type": "database",
+      "label": "记忆日志",
+      "sublabel": "Markdown",
+      "pos": [20, 352],
+      "size": [196, 64],
+      "sources": [
+        { "path": "tradingagents/memory/log.py", "line": 10, "end_line": 45, "label": "追加决策条目" },
+        { "path": "tradingagents/graph/trading_graph.py", "line": 305, "end_line": 323, "label": "开跑前读入教训" }
+      ]
+    },
+    {
+      "id": "checkpoint",
+      "type": "database",
+      "label": "检查点",
+      "sublabel": "每标的 SQLite",
+      "tag": "默认关闭",
+      "pos": [20, 448],
+      "size": [196, 64],
+      "sources": [
+        { "path": "tradingagents/graph/checkpointer.py", "line": 19, "end_line": 51, "label": "按标的建库" },
+        { "path": "tradingagents/graph/trading_graph.py", "line": 207, "end_line": 219, "label": "开启才续跑" }
+      ]
+    },
+    {
+      "id": "reports",
+      "type": "database",
+      "label": "结果目录",
+      "sublabel": "报告与状态",
+      "pos": [608, 1336],
+      "size": [200, 76],
+      "sources": [
+        { "path": "tradingagents/reporting.py", "line": 32, "end_line": 39, "label": "写入报告树" },
+        { "path": "tradingagents/graph/trading_graph.py", "line": 290, "end_line": 298, "label": "save_reports" },
+        { "path": "tradingagents/graph/trading_graph.py", "line": 415, "end_line": 450, "label": "状态 JSON" }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "进程内 LangGraph",
+      "wraps": ["graph", "analysts", "research", "trader", "risk", "pm", "router"],
+      "pad": 16
+    }
+  ],
+  "connections": [
+    { "id": "user-cli", "from": "user", "to": "cli", "label": "启动分析", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" },
+    { "id": "cli-graph", "from": "cli", "to": "graph", "label": "创建运行", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" },
+    { "id": "graph-analysts", "from": "graph", "to": "analysts", "label": "并行分析", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" },
+    { "id": "analysts-research", "from": "analysts", "to": "research", "label": "报告齐备", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
+    { "id": "research-trader", "from": "research", "to": "trader", "label": "投资计划", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" },
+    { "id": "trader-risk", "from": "trader", "to": "risk", "label": "交易方案", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" },
+    { "id": "risk-pm", "from": "risk", "to": "pm", "label": "辩完终裁", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" },
+    { "id": "pm-reports", "from": "pm", "to": "reports", "label": "写入报告", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" },
+    { "id": "graph-llm", "from": "graph", "to": "llm", "label": "双模型", "fromSide": "right", "toSide": "left" },
+    { "id": "graph-memory", "from": "graph", "to": "memory", "label": "读写教训", "fromSide": "left", "toSide": "right" },
+    { "id": "graph-checkpoint", "from": "graph", "to": "checkpoint", "label": "可选续跑", "variant": "dashed", "fromSide": "left", "toSide": "right" },
+    { "id": "analysts-social", "from": "analysts", "to": "social", "label": "原文注入", "fromSide": "left", "toSide": "right" },
+    { "id": "analysts-router", "from": "analysts", "to": "router", "label": "工具调用", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" },
+    { "id": "router-vendors", "from": "router", "to": "vendors", "label": "按配置回退", "fromSide": "left", "toSide": "right" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "主路径",
+      "items": [
+        "CLI 选定标的、日期和分析师后，交易图编译 LangGraph 并流式执行",
+        "市场、情绪、新闻、基本面同时开工；四份报告齐了才进入多空辩论",
+        "研究经理给出计划，交易员拟定方案，风险三方轮转结束后组合经理给出五档评级"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "数据边界",
+      "items": [
+        "带日期的工具把窗口截断到 trade_date，不读取更晚的数据",
+        "默认行情走 Yahoo，财报先 SEC EDGAR 再 Yahoo，宏观走 FRED，预测市场走 Polymarket",
+        "只回退到 data_vendors 里写明的供应商；情绪岗直接拉 StockTwits 和 Reddit，有 TYPESAFE_API_KEY 时先用 Jev 筛帖"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "落盘与回测",
+      "items": [
+        "开跑前结算并读入该标的已到期教训，结束后把决策追加进记忆日志",
+        "checkpoint_enabled 时按标的写入 SQLite，成功跑完后清除；默认关闭",
+        "报告树和 full_states_log 由交易图写入 results_dir；回测对日期网格重复调用同一 propagate，格子之间不结转持仓"
+      ]
+    }
+  ]
+}
