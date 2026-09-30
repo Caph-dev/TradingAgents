@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "96139de3-0253-48aa-8f61-9f52b96b6fcb",
+  "status": "current",
+  "command": "deliver",
+  "type": "dataflow",
+  "input": "/Users/caph/Workspace/TradingAgents/.archify/dataflow-market-snapshot-20260930-204022/candidate.json",
+  "output": "/Users/caph/Workspace/TradingAgents/.archify/dataflow-market-snapshot-20260930-204022/market-snapshot.html",
+  "specification": {
+    "sha256": "feabb46b902decd9f767ed5c7b33c62ac931efd12fd5522ec5bcaf58ae81ba73",
+    "bytes": 5640
+  },
+  "artifact": {
+    "sha256": "31adfd18acd13f94fd19588d7449942a3eed900bc9314481a97c828005971bf0",
+    "bytes": 754696
+  }
+}

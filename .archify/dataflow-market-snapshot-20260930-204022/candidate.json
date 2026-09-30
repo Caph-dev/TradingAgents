@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "确定性行情快照：精确数字不经过模型",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "viewBox": [1080, 520],
+    "output": ".archify/dataflow-market-snapshot-20260930-204022/market-snapshot.html",
+    "repository": {
+      "url": "git@github.com:Caph-dev/TradingAgents.git",
+      "revision": "5a7801deb75759b7a3e5d2f2e05697f6b9045174",
+      "link_mode": "local-only"
+    }
+  },
+  "stages": [
+    {
+      "label": "工具入口"
+    },
+    {
+      "label": "按报告取价"
+    },
+    {
+      "label": "守门"
+    },
+    {
+      "label": "确定性计算"
+    },
+    {
+      "label": "分析师引用"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "snap_tool",
+      "type": "backend",
+      "label": "快照工具",
+      "sublabel": "日期先钳制",
+      "tag": "日期先钳制",
+      "stage": 0,
+      "row": 1,
+      "width": 120,
+      "height": 58,
+      "sources": [
+        {
+          "path": "tradingagents/agents/tools.py",
+          "line": 70,
+          "end_line": 87,
+          "label": "as_of 后再计算"
+        }
+      ]
+    },
+    {
+      "id": "raw_ohlcv",
+      "type": "database",
+      "label": "未填充 OHLCV",
+      "sublabel": "不填充缺口",
+      "tag": "空值不填充",
+      "stage": 1,
+      "row": 1,
+      "width": 120,
+      "height": 58,
+      "sources": [
+        {
+          "path": "tradingagents/dataflows/vendors/yahoo/snapshot.py",
+          "line": 37,
+          "end_line": 39,
+          "label": "快照禁止缺口填充"
+        },
+        {
+          "path": "tradingagents/dataflows/vendors/yahoo/ohlcv.py",
+          "line": 229,
+          "end_line": 251,
+          "label": "先截断再决定是否填充"
+        }
+      ]
+    },
+    {
+      "id": "stale_stop",
+      "type": "security",
+      "label": "拒绝陈旧帧",
+      "sublabel": "超过十天不用",
+      "tag": "超过 10 天不用",
+      "stage": 1,
+      "row": 0,
+      "width": 120,
+      "height": 58,
+      "sources": [
+        {
+          "path": "tradingagents/dataflows/vendors/yahoo/ohlcv.py",
+          "line": 15,
+          "end_line": 18,
+          "label": "10 天阈值"
+        },
+        {
+          "path": "tradingagents/dataflows/vendors/yahoo/ohlcv.py",
+          "line": 109,
+          "end_line": 143,
+          "label": "陈旧则抛无数据"
+        }
+      ]
+    },
+    {
+      "id": "refilter",
+      "type": "security",
+      "label": "再截分析日",
+      "sublabel": "再滤一遍",
+      "tag": "再滤一次",
+      "stage": 2,
+      "row": 1,
+      "width": 120,
+      "height": 58,
+      "sources": [
+        {
+          "path": "tradingagents/dataflows/vendors/yahoo/snapshot.py",
+          "line": 30,
+          "end_line": 49,
+          "label": "防御性重过滤"
+        }
+      ]
+    },
+    {
+      "id": "fixed_indicators",
+      "type": "backend",
+      "label": "固定指标集",
+      "sublabel": "逐项计算",
+      "tag": "每次同一形状",
+      "stage": 3,
+      "row": 1,
+      "width": 120,
+      "height": 58,
+      "sources": [
+        {
+          "path": "tradingagents/dataflows/vendors/yahoo/snapshot.py",
+          "line": 22,
+          "end_line": 27,
+          "label": "指标名单是常量"
+        },
+        {
+          "path": "tradingagents/dataflows/vendors/yahoo/snapshot.py",
+          "line": 66,
+          "end_line": 86,
+          "label": "一项失败不拖垮快照"
+        }
+      ]
+    },
+    {
+      "id": "market_analyst",
+      "type": "backend",
+      "label": "市场分析师",
+      "sublabel": "当作事实来源",
+      "tag": "冲突就标出",
+      "stage": 4,
+      "row": 1,
+      "width": 120,
+      "height": 58,
+      "sources": [
+        {
+          "path": "tradingagents/dataflows/vendors/yahoo/snapshot.py",
+          "line": 118,
+          "end_line": 126,
+          "label": "精确数字的事实来源"
+        }
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "id": "call_load",
+      "from": "snap_tool",
+      "to": "raw_ohlcv",
+      "label": "分析日",
+      "variant": "emphasis"
+    },
+    {
+      "id": "stale_branch",
+      "from": "raw_ohlcv",
+      "to": "stale_stop",
+      "label": "过旧则弃",
+      "variant": "security",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "reported_rows",
+      "from": "raw_ohlcv",
+      "to": "refilter",
+      "label": "报告原值",
+      "variant": "emphasis"
+    },
+    {
+      "id": "cutoff_rows",
+      "from": "refilter",
+      "to": "fixed_indicators",
+      "label": "再截一次",
+      "variant": "emphasis"
+    },
+    {
+      "id": "truth_table",
+      "from": "fixed_indicators",
+      "to": "market_analyst",
+      "label": "事实来源",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "数字由代码算出",
+      "items": [
+        "均线、布林、MACD、RSI、ATR 来自固定常量，不由模型挑选",
+        "尾注要求分析师把快照当作精确价位和指标的事实来源"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "填充不能冒充报价",
+      "items": [
+        "指标路径可以前向填充，快照必须 fill_gaps=False",
+        "被填上的收盘价会把上一交易日的数字标成当天"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "校验路径不信任输入",
+      "items": [
+        "load_ohlcv 已经按分析日截断，_verified_rows 仍再滤一次",
+        "最新行情早于分析日超过 10 天则拒绝，而不是拿旧帧充数"
+      ]
+    }
+  ]
+}

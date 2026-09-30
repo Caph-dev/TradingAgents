@@ -1,0 +1,170 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "决策结算：持有窗口走完才算 Alpha",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "output": ".archify/workflow-alpha-settlement-20260930-204022/alpha-settlement.html",
+    "repository": {
+      "url": "git@github.com:Caph-dev/TradingAgents.git",
+      "revision": "5a7801deb75759b7a3e5d2f2e05697f6b9045174",
+      "link_mode": "local-only"
+    }
+  },
+  "lanes": [
+    { "id": "log", "label": "记忆日志" },
+    { "id": "price", "label": "运行入口与归因" },
+    { "id": "retry", "label": "留待下次", "variant": "exception" }
+  ],
+  "phases": [
+    { "id": "record", "label": "记下待结算", "fromCol": 0, "toCol": 1 },
+    { "id": "score", "label": "窗口走完才归因", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "reinject", "label": "教训按可知日回注", "fromCol": 4, "toCol": 5 }
+  ],
+  "mainPath": ["pending", "next_run", "bench", "returns", "reflect", "past"],
+  "nodes": [
+    {
+      "id": "pending",
+      "lane": "log",
+      "col": 0,
+      "type": "database",
+      "label": "待结算条目",
+      "sublabel": "store_decision",
+      "tag": "不调用模型",
+      "width": 148,
+      "sources": [
+        { "path": "tradingagents/memory/log.py", "line": 31, "end_line": 59, "label": "追加 pending 标签" },
+        { "path": "tradingagents/graph/trading_graph.py", "line": 336, "end_line": 348, "label": "运行结束才记录" }
+      ]
+    },
+    {
+      "id": "next_run",
+      "lane": "price",
+      "col": 1,
+      "type": "backend",
+      "label": "下次同标的",
+      "sublabel": "create_run_state",
+      "tag": "先结算再注入",
+      "width": 148,
+      "sources": [
+        { "path": "tradingagents/graph/trading_graph.py", "line": 305, "end_line": 320, "label": "入口先结算再读教训" }
+      ]
+    },
+    {
+      "id": "bench",
+      "lane": "price",
+      "col": 2,
+      "type": "backend",
+      "label": "区域基准",
+      "sublabel": "resolve_benchmark",
+      "tag": "后缀映射",
+      "width": 148,
+      "sources": [
+        { "path": "tradingagents/memory/settlement.py", "line": 13, "end_line": 34, "label": "本币百分比对区域指数" }
+      ]
+    },
+    {
+      "id": "returns",
+      "lane": "price",
+      "col": 3,
+      "type": "backend",
+      "label": "窗口收益",
+      "sublabel": "fetch_returns",
+      "tag": "alpha = raw − bench",
+      "width": 156,
+      "sources": [
+        { "path": "tradingagents/memory/settlement.py", "line": 51, "end_line": 104, "label": "未满窗口则不结算" }
+      ]
+    },
+    {
+      "id": "hold",
+      "lane": "retry",
+      "col": 3,
+      "type": "security",
+      "label": "保持 pending",
+      "sublabel": "下次同标的再试",
+      "tag": "不结算半窗",
+      "width": 156,
+      "sources": [
+        { "path": "tradingagents/memory/settlement.py", "line": 78, "end_line": 129, "label": "取价失败也留待重试" }
+      ]
+    },
+    {
+      "id": "reflect",
+      "lane": "price",
+      "col": 4,
+      "type": "backend",
+      "label": "写成教训",
+      "sublabel": "Reflector",
+      "tag": "恰好 2–4 句",
+      "width": 148,
+      "sources": [
+        { "path": "tradingagents/memory/reflection.py", "line": 13, "end_line": 34, "label": "点明窗口可能短于论点" }
+      ]
+    },
+    {
+      "id": "reflect_fail",
+      "lane": "retry",
+      "col": 4,
+      "type": "security",
+      "label": "反思失败",
+      "sublabel": "条目仍 pending",
+      "tag": "不阻断本次分析",
+      "width": 156,
+      "sources": [
+        { "path": "tradingagents/memory/settlement.py", "line": 130, "end_line": 143, "label": "模型抛错则跳过该条" }
+      ]
+    },
+    {
+      "id": "past",
+      "lane": "log",
+      "col": 5,
+      "type": "database",
+      "label": "时点回注",
+      "sublabel": "get_past_context",
+      "tag": "resolved ≤ 分析日",
+      "width": 156,
+      "sources": [
+        { "path": "tradingagents/memory/log.py", "line": 80, "end_line": 94, "label": "按可知日过滤" },
+        { "path": "tradingagents/memory/log.py", "line": 241, "end_line": 254, "label": "标签写入 resolved" },
+        { "path": "tradingagents/memory/settlement.py", "line": 154, "end_line": 155, "label": "成功后一次原子写回" }
+      ]
+    }
+  ],
+  "edges": [
+    { "id": "wait_next", "from": "pending", "to": "next_run", "label": "下次同标的入口", "variant": "emphasis", "role": "main" },
+    { "id": "pick_pending", "from": "next_run", "to": "bench", "label": "同标的 pending", "variant": "emphasis", "role": "main" },
+    { "id": "to_returns", "from": "bench", "to": "returns", "label": "基准代码", "variant": "default", "role": "main" },
+    { "id": "window_ready", "from": "returns", "to": "reflect", "label": "窗口已走完", "variant": "emphasis", "role": "main" },
+    { "id": "not_ready", "from": "returns", "to": "hold", "label": "未满持有窗口", "variant": "security", "role": "error" },
+    { "id": "write_lesson", "from": "reflect", "to": "past", "label": "原子写回后过滤", "variant": "emphasis", "role": "main" },
+    { "id": "llm_fail", "from": "reflect", "to": "reflect_fail", "label": "模型抛错", "variant": "security", "role": "error" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "结算不在当次运行",
+      "items": [
+        "一次运行结束只追加 pending，不调用模型",
+        "同标的下一次进入 create_run_state 时才结算，其他标的继续累积"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Alpha 口径",
+      "items": [
+        "原始收益减去区域基准，两端用 asof 对齐不同交易日历",
+        "比较的是各自货币的百分比，不做汇率调整"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "教训不能来自未来",
+      "items": [
+        "resolved 是出场那根 K 线的日期，即结果对外可知的时点",
+        "历史运行只读 resolved 不晚于分析日的条目"
+      ]
+    }
+  ]
+}

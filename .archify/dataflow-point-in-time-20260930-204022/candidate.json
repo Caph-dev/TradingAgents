@@ -1,0 +1,252 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "时点一致性：分析日之后的数据进不了上下文",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "viewBox": [1000, 640],
+    "output": ".archify/dataflow-point-in-time-20260930-204022/point-in-time.html",
+    "repository": {
+      "url": "git@github.com:Caph-dev/TradingAgents.git",
+      "revision": "5a7801deb75759b7a3e5d2f2e05697f6b9045174",
+      "link_mode": "local-only"
+    }
+  },
+  "stages": [
+    {
+      "label": "运行入口"
+    },
+    {
+      "label": "工具闸门"
+    },
+    {
+      "label": "时点策略"
+    },
+    {
+      "label": "分析消费"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "date_gate",
+      "type": "security",
+      "label": "日期校验",
+      "sublabel": "不得晚于今天",
+      "tag": "拒绝未来日",
+      "stage": 0,
+      "row": 1,
+      "width": 120,
+      "height": 58,
+      "sources": [
+        {
+          "path": "tradingagents/graph/trading_graph.py",
+          "line": 30,
+          "end_line": 41,
+          "label": "规范化并拒绝未来日期"
+        }
+      ]
+    },
+    {
+      "id": "tool_clamp",
+      "type": "security",
+      "label": "工具日期钳制",
+      "sublabel": "as_of 钳制",
+      "tag": "运行日不可见",
+      "stage": 1,
+      "row": 1,
+      "width": 120,
+      "height": 58,
+      "sources": [
+        {
+          "path": "tradingagents/agents/tools.py",
+          "line": 1,
+          "end_line": 35,
+          "label": "trade_date 从状态注入"
+        },
+        {
+          "path": "tradingagents/dataflows/date_window.py",
+          "line": 78,
+          "end_line": 101,
+          "label": "取较早日期"
+        }
+      ]
+    },
+    {
+      "id": "dated_serve",
+      "type": "backend",
+      "label": "按时点可服务",
+      "sublabel": "窗口 / vintage / 申报",
+      "tag": "能回答才给数",
+      "stage": 2,
+      "row": 1,
+      "width": 120,
+      "height": 58,
+      "sources": [
+        {
+          "path": "tradingagents/dataflows/date_window.py",
+          "line": 23,
+          "end_line": 32,
+          "label": "新闻与行情窗口"
+        },
+        {
+          "path": "tradingagents/dataflows/vendors/fred.py",
+          "line": 184,
+          "end_line": 193,
+          "label": "FRED 固定修订版本"
+        },
+        {
+          "path": "tradingagents/dataflows/vendors/sec_edgar.py",
+          "line": 153,
+          "end_line": 187,
+          "label": "EDGAR 取申报日前最新"
+        }
+      ]
+    },
+    {
+      "id": "withhold",
+      "type": "security",
+      "label": "历史即抑制",
+      "sublabel": "请求前返回",
+      "tag": "发请求前短路",
+      "stage": 2,
+      "row": 3,
+      "width": 120,
+      "height": 58,
+      "sources": [
+        {
+          "path": "tradingagents/dataflows/date_window.py",
+          "line": 104,
+          "end_line": 166,
+          "label": "无法证明则不提供数据"
+        }
+      ]
+    },
+    {
+      "id": "analyst",
+      "type": "backend",
+      "label": "分析师上下文",
+      "sublabel": "当时可知",
+      "tag": "缺口要说明",
+      "stage": 3,
+      "row": 1,
+      "width": 120,
+      "height": 58,
+      "sources": [
+        {
+          "path": "tradingagents/agents/tools.py",
+          "line": 34,
+          "end_line": 35,
+          "label": "钳制后再路由供应商"
+        },
+        {
+          "path": "tradingagents/graph/trading_graph.py",
+          "line": 313,
+          "end_line": 320,
+          "label": "教训按分析日注入"
+        }
+      ]
+    },
+    {
+      "id": "memory_cut",
+      "type": "database",
+      "label": "记忆时点截断",
+      "sublabel": "resolved 截断",
+      "tag": "已可知教训",
+      "stage": 3,
+      "row": 3,
+      "width": 120,
+      "height": 58,
+      "sources": [
+        {
+          "path": "tradingagents/graph/trading_graph.py",
+          "line": 147,
+          "end_line": 155,
+          "label": "历史运行才传 as_of"
+        },
+        {
+          "path": "tradingagents/memory/log.py",
+          "line": 80,
+          "end_line": 94,
+          "label": "resolved 不晚于分析日"
+        }
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "id": "inject_date",
+      "from": "date_gate",
+      "to": "tool_clamp",
+      "label": "写入状态",
+      "variant": "emphasis"
+    },
+    {
+      "id": "clamp_serve",
+      "from": "tool_clamp",
+      "to": "dated_serve",
+      "label": "钳到分析日",
+      "variant": "emphasis"
+    },
+    {
+      "id": "serve_analyst",
+      "from": "dated_serve",
+      "to": "analyst",
+      "label": "当时可知",
+      "variant": "emphasis"
+    },
+    {
+      "id": "serve_withhold",
+      "from": "dated_serve",
+      "to": "withhold",
+      "label": "无法证明",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 25
+    },
+    {
+      "id": "memory_as_of",
+      "from": "date_gate",
+      "to": "memory_cut",
+      "label": "历史 as_of",
+      "variant": "security",
+      "route": "bottom-channel"
+    },
+    {
+      "id": "lessons_in",
+      "from": "memory_cut",
+      "to": "analyst",
+      "label": "已可知",
+      "variant": "security",
+      "fromSide": "top",
+      "toSide": "bottom"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "运行日是最终上界",
+      "items": [
+        "trade_date 经 InjectedState 注入，不出现在模型可见的工具参数里",
+        "模型只能把窗口收窄，as_of 会把更晚的请求钳回分析日"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "不能回答就抑制",
+      "items": [
+        "实时概况、无填报日的报表和内部交易，在历史运行里发请求前就返回说明",
+        "EDGAR 因每笔事实带 filed，可以按申报日服务，而不是整类抑制"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "教训也有可知时间",
+      "items": [
+        "历史运行只注入 resolved 日期不晚于分析日的条目",
+        "当日运行传 as_of=None，不过滤实时记忆"
+      ]
+    }
+  ]
+}

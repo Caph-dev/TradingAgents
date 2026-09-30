@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "e7183a43-bf0a-4100-aaed-52bb02d82e6f",
+  "status": "current",
+  "command": "deliver",
+  "type": "dataflow",
+  "input": "/Users/caph/Workspace/TradingAgents/.archify/dataflow-point-in-time-20260930-204022/candidate.json",
+  "output": "/Users/caph/Workspace/TradingAgents/.archify/dataflow-point-in-time-20260930-204022/point-in-time.html",
+  "specification": {
+    "sha256": "f878adbd022ec01c5e8fb06d499025f7af69201273d2dde80432290a160733c6",
+    "bytes": 6176
+  },
+  "artifact": {
+    "sha256": "4e5f3af5f4a3a600ddb4d59389c4ac92c8e25410852e2b84438e5441bd842755",
+    "bytes": 755376
+  }
+}

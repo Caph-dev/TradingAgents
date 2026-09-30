@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "99588701-3326-49a8-9ff1-3babce0b4164",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "/Users/caph/Workspace/TradingAgents/.archify/workflow-alpha-settlement-20260930-204022/candidate.json",
+  "output": "/Users/caph/Workspace/TradingAgents/.archify/workflow-alpha-settlement-20260930-204022/alpha-settlement.html",
+  "specification": {
+    "sha256": "2ec8c8e1dbcac202164292feda6f771503c2755e464550476b0d914740fccb69",
+    "bytes": 6111
+  },
+  "artifact": {
+    "sha256": "366d6361be12a19a37853ebf8c8e11bdd2793bea1ad8dfd4a89fb877b1d71cfb",
+    "bytes": 760650
+  }
+}

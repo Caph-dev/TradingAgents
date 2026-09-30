@@ -1,0 +1,245 @@
+{
+  "id": "2026-09-30-203546",
+  "generated_at": "2026-09-30T12:35:46.278999Z",
+  "language": "zh",
+  "pages": [
+    {
+      "slug": "1-gai-lan",
+      "title": "概览",
+      "file": "1-gai-lan.md",
+      "section": "入门指南",
+      "level": "Beginner"
+    },
+    {
+      "slug": "2-kuai-su-kai-shi",
+      "title": "快速开始",
+      "file": "2-kuai-su-kai-shi.md",
+      "section": "入门指南",
+      "level": "Beginner"
+    },
+    {
+      "slug": "3-ben-di-an-zhuang-yu-yi-lai",
+      "title": "本地安装与依赖",
+      "file": "3-ben-di-an-zhuang-yu-yi-lai.md",
+      "section": "入门指南",
+      "group": "运行环境与部署",
+      "level": "Beginner"
+    },
+    {
+      "slug": "4-docker-bu-shu-yu-shu-ju-chi-jiu-hua",
+      "title": "Docker 部署与数据持久化",
+      "file": "4-docker-bu-shu-yu-shu-ju-chi-jiu-hua.md",
+      "section": "入门指南",
+      "group": "运行环境与部署",
+      "level": "Beginner"
+    },
+    {
+      "slug": "5-jiao-hu-shi-cli-yu-yun-xing-liu-cheng",
+      "title": "交互式 CLI 与运行流程",
+      "file": "5-jiao-hu-shi-cli-yu-yun-xing-liu-cheng.md",
+      "section": "入门指南",
+      "group": "命令行使用",
+      "level": "Beginner"
+    },
+    {
+      "slug": "6-wu-ti-shi-pi-chu-li-yun-xing-biao-zhi-yu-huan-jing-bian-liang",
+      "title": "无提示批处理运行（标志与环境变量）",
+      "file": "6-wu-ti-shi-pi-chu-li-yun-xing-biao-zhi-yu-huan-jing-bian-liang.md",
+      "section": "入门指南",
+      "group": "命令行使用",
+      "level": "Intermediate"
+    },
+    {
+      "slug": "7-duo-shi-chang-xing-qing-yu-biao-de-fu-hao",
+      "title": "多市场行情与标的符号",
+      "file": "7-duo-shi-chang-xing-qing-yu-biao-de-fu-hao.md",
+      "section": "入门指南",
+      "group": "命令行使用",
+      "level": "Beginner"
+    },
+    {
+      "slug": "8-hui-ce-ming-ling-xing-yu-jie-guo-jie-du",
+      "title": "回测命令行与结果解读",
+      "file": "8-hui-ce-ming-ling-xing-yu-jie-guo-jie-du.md",
+      "section": "入门指南",
+      "group": "命令行使用",
+      "level": "Intermediate"
+    },
+    {
+      "slug": "9-python-api-yu-pei-zhi-diao-zheng",
+      "title": "Python API 与配置调整",
+      "file": "9-python-api-yu-pei-zhi-diao-zheng.md",
+      "section": "入门指南",
+      "group": "编程接口",
+      "level": "Intermediate"
+    },
+    {
+      "slug": "10-zhuang-tai-chi-jiu-hua-yu-duan-dian-hui-fu",
+      "title": "状态持久化与断点恢复",
+      "file": "10-zhuang-tai-chi-jiu-hua-yu-duan-dian-hui-fu.md",
+      "section": "入门指南",
+      "group": "编程接口",
+      "level": "Intermediate"
+    },
+    {
+      "slug": "11-zong-ti-jia-gou-yu-duo-zhi-neng-ti-xie-zuo",
+      "title": "总体架构与多智能体协作",
+      "file": "11-zong-ti-jia-gou-yu-duo-zhi-neng-ti-xie-zuo.md",
+      "section": "深入解析",
+      "group": "架构与编排",
+      "level": "Intermediate"
+    },
+    {
+      "slug": "12-langgraph-tu-gou-jian-yu-bing-xing-fen-xi-shi-zhi-xing",
+      "title": "LangGraph 图构建与并行分析师执行",
+      "file": "12-langgraph-tu-gou-jian-yu-bing-xing-fen-xi-shi-zhi-xing.md",
+      "section": "深入解析",
+      "group": "架构与编排",
+      "level": "Advanced"
+    },
+    {
+      "slug": "13-bian-lun-lu-you-yu-tiao-jian-luo-ji",
+      "title": "辩论路由与条件逻辑",
+      "file": "13-bian-lun-lu-you-yu-tiao-jian-luo-ji.md",
+      "section": "深入解析",
+      "group": "架构与编排",
+      "level": "Intermediate"
+    },
+    {
+      "slug": "14-zhi-neng-ti-zhuang-tai-mo-xing-yu-shu-ju-liu-zhuan",
+      "title": "智能体状态模型与数据流转",
+      "file": "14-zhi-neng-ti-zhuang-tai-mo-xing-yu-shu-ju-liu-zhuan.md",
+      "section": "深入解析",
+      "group": "架构与编排",
+      "level": "Intermediate"
+    },
+    {
+      "slug": "15-fen-xi-shi-tuan-dui-ji-ben-mian-shi-chang-xin-wen-yu-qing-xu",
+      "title": "分析师团队：基本面、市场、新闻与情绪",
+      "file": "15-fen-xi-shi-tuan-dui-ji-ben-mian-shi-chang-xin-wen-yu-qing-xu.md",
+      "section": "深入解析",
+      "group": "智能体团队",
+      "level": "Intermediate"
+    },
+    {
+      "slug": "16-yan-jiu-yuan-bian-lun-yu-jie-gou-hua-shu-chu",
+      "title": "研究员辩论与结构化输出",
+      "file": "16-yan-jiu-yuan-bian-lun-yu-jie-gou-hua-shu-chu.md",
+      "section": "深入解析",
+      "group": "智能体团队",
+      "level": "Intermediate"
+    },
+    {
+      "slug": "17-jiao-yi-yuan-yu-feng-xian-guan-li-jue-ce-tuan-dui",
+      "title": "交易员与风险管理决策团队",
+      "file": "17-jiao-yi-yuan-yu-feng-xian-guan-li-jue-ce-tuan-dui.md",
+      "section": "深入解析",
+      "group": "智能体团队",
+      "level": "Intermediate"
+    },
+    {
+      "slug": "18-shu-ju-gong-ying-shang-lu-you-yu-hui-tui-lian",
+      "title": "数据供应商路由与回退链",
+      "file": "18-shu-ju-gong-ying-shang-lu-you-yu-hui-tui-lian.md",
+      "section": "深入解析",
+      "group": "数据层",
+      "level": "Advanced"
+    },
+    {
+      "slug": "19-shi-dian-zhi-xing-yu-fang-wei-lai-han-shu",
+      "title": "时点一致性与防未来函数",
+      "file": "19-shi-dian-zhi-xing-yu-fang-wei-lai-han-shu.md",
+      "section": "深入解析",
+      "group": "数据层",
+      "level": "Advanced"
+    },
+    {
+      "slug": "20-biao-de-fu-hao-gui-hua-yu-gong-si-shen-fen-jie-xi",
+      "title": "标的符号归一化与公司身份解析",
+      "file": "20-biao-de-fu-hao-gui-hua-yu-gong-si-shen-fen-jie-xi.md",
+      "section": "深入解析",
+      "group": "数据层",
+      "level": "Intermediate"
+    },
+    {
+      "slug": "21-que-ding-xing-shi-chang-kuai-zhao-yu-shu-zhi-xiao-yan",
+      "title": "确定性市场快照与数值校验",
+      "file": "21-que-ding-xing-shi-chang-kuai-zhao-yu-shu-zhi-xiao-yan.md",
+      "section": "深入解析",
+      "group": "数据层",
+      "level": "Intermediate"
+    },
+    {
+      "slug": "22-duo-gong-ying-shang-ke-hu-duan-yu-gong-han-mo-shi",
+      "title": "多供应商客户端与工厂模式",
+      "file": "22-duo-gong-ying-shang-ke-hu-duan-yu-gong-han-mo-shi.md",
+      "section": "深入解析",
+      "group": "LLM 客户端层",
+      "level": "Intermediate"
+    },
+    {
+      "slug": "23-mo-xing-neng-li-biao-yu-jie-gou-hua-shu-chu-gua-pei",
+      "title": "模型能力表与结构化输出适配",
+      "file": "23-mo-xing-neng-li-biao-yu-jie-gou-hua-shu-chu-gua-pei.md",
+      "section": "深入解析",
+      "group": "LLM 客户端层",
+      "level": "Advanced"
+    },
+    {
+      "slug": "24-mo-xing-mu-lu-yu-jiao-hu-xuan-ze",
+      "title": "模型目录与交互选择",
+      "file": "24-mo-xing-mu-lu-yu-jiao-hu-xuan-ze.md",
+      "section": "深入解析",
+      "group": "LLM 客户端层",
+      "level": "Beginner"
+    },
+    {
+      "slug": "25-ji-yi-ri-zhi-yu-jue-ce-ji-lu",
+      "title": "记忆日志与决策记录",
+      "file": "25-ji-yi-ri-zhi-yu-jue-ce-ji-lu.md",
+      "section": "深入解析",
+      "group": "记忆与评估",
+      "level": "Intermediate"
+    },
+    {
+      "slug": "26-fan-si-yu-jie-suan-alpha-gui-yin",
+      "title": "反思与结算：Alpha 归因",
+      "file": "26-fan-si-yu-jie-suan-alpha-gui-yin.md",
+      "section": "深入解析",
+      "group": "记忆与评估",
+      "level": "Advanced"
+    },
+    {
+      "slug": "27-hui-su-ce-shi-yu-jue-ce-ping-gu-kuang-jia",
+      "title": "回溯测试与决策评估框架",
+      "file": "27-hui-su-ce-shi-yu-jue-ce-ping-gu-kuang-jia.md",
+      "section": "深入解析",
+      "group": "记忆与评估",
+      "level": "Advanced"
+    },
+    {
+      "slug": "28-bao-gao-shu-sheng-cheng-yu-bao-cun",
+      "title": "报告树生成与保存",
+      "file": "28-bao-gao-shu-sheng-cheng-yu-bao-cun.md",
+      "section": "深入解析",
+      "group": "输出与配置",
+      "level": "Beginner"
+    },
+    {
+      "slug": "29-pei-zhi-xi-tong-yu-huan-jing-bian-liang-fu-gai",
+      "title": "配置系统与环境变量覆盖",
+      "file": "29-pei-zhi-xi-tong-yu-huan-jing-bian-liang-fu-gai.md",
+      "section": "深入解析",
+      "group": "输出与配置",
+      "level": "Intermediate"
+    },
+    {
+      "slug": "30-tou-zi-zu-he-shang-xia-wen-gan-zhi",
+      "title": "投资组合上下文感知",
+      "file": "30-tou-zi-zu-he-shang-xia-wen-gan-zhi.md",
+      "section": "深入解析",
+      "group": "输出与配置",
+      "level": "Intermediate"
+    }
+  ]
+}
